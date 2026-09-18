@@ -30,9 +30,29 @@ def aging():
     for citizen in citizens:
         citizen["age"] += 1
 
+def death_probability(age):
+    if age < 5:
+        return 0.0001
+    elif age < 30:
+        return 0.00001
+    elif age <= 50:
+        return 0.0001
+    else:
+        return 0.001
+
+def death():
+    global citizens
+    citizens = [
+        citizen for citizen in citizens
+        if random.random() >= death_probability(citizen["age"])
+    ]
+
 def advance_time():
     global month
     month += 1
+
+    death()
+
     if month % 12 == 0:
         aging()
 
@@ -49,7 +69,9 @@ Month : {month}
 3. Display citizens
 4. Exit
 ============================""")
+    
     choice = input("Enter your choice: ")
+
     if choice == "1":
         advance_time()
     elif choice == "2":
@@ -60,5 +82,6 @@ Month : {month}
         exit()
     else:
         print("Invalid choice. Please try again.")
+
 while True:
-    menu()  
+    menu()
