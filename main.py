@@ -37,7 +37,6 @@ def advance_time():
 
 
 print("Initial citizens:")
-print(f"Year: {year}, Month: {month}") 
 for i in range(10):
     citizen = Citizen(random.randint(20, 39), random.randint(1000, 10000))
     citizens.append(citizen)
@@ -50,6 +49,7 @@ for i in range(10):
         citizen.salary = 0
         
 def display_citizens():  
+    print(f"\nYear: {year}, Month: {month}\n")
     for i in range(len(citizens)):
         citizen = citizens[i]
         if citizen.salary > 0:
@@ -60,25 +60,35 @@ def display_citizens():
             statut = "Retired"
             citizen.salary = 0  
         if statut == "Employed":
-            print(f"Citizen {i+1}: Age: {citizen.age}, Money: {citizen.money}, Status: {statut}, Salary: {citizen.salary}")
+            print(f"Citizen {i+1}: Age: {citizen.age}, Money: {citizen.money:,.0f}, Status: {statut}, Salary: {citizen.salary:,.0f}")
         else:
-            print(f"Citizen {i+1}: Age: {citizen.age}, Money: {citizen.money}, Status: {statut}")
+            print(f"Citizen {i+1}: Age: {citizen.age}, Money: {citizen.money:,.0f}, Status: {statut}")
 
 display_citizens()
 while True:
     if keyboard.is_pressed('1'):
         advance_time()
         display_citizens()
+        while keyboard.is_pressed('1'):
+            pass  # Wait until the key is released
 
     elif keyboard.is_pressed('2'):
         for _ in range(3):
             advance_time()
         display_citizens()
+        while keyboard.is_pressed('2'):
+            pass  # Wait until the key is released
     elif keyboard.is_pressed('shift'):
         for _ in range(12):
             advance_time()
         display_citizens()
+        while keyboard.is_pressed('shift'):
+            pass  # Wait until the key is released
     elif keyboard.is_pressed('tab'):
         for _ in range(36):
             advance_time()
         display_citizens()
+        while keyboard.is_pressed('tab'):
+            pass  # Wait until the key is released
+    elif keyboard.is_pressed('end'):
+        break
