@@ -1,259 +1,208 @@
 # WorldSimulation 🌍
 
-WorldSimulation is a Python simulation project inspired by games like **BitLife** and **WorldBox**.
+A Python simulation project inspired by **BitLife**, **WorldBox**, and the idea of a small virtual world that can evolve over time.
 
-The idea is to create a small simulated world where citizens have their own attributes and behaviors, then gradually add systems that make the world evolve over time.
+The goal is simple: create a world populated by citizens, give them rules and systems, then observe what happens.
 
-The long-term goal is to be able to observe the population, introduce new rules, and see how the world reacts to them.
-
----
-
-## 🚧 Why I restarted the project
-
-This project did not start with the structure it has today.
-
-My first version became more complicated than I could properly manage. I was learning new Python concepts while trying to build a simulation that was already becoming too ambitious.
-
-I was adding features faster than I was organizing the project.
-
-Eventually, I decided to **restart WorldSimulation from scratch** instead of continuing to build on top of code I no longer fully understood.
-
-This time, I wanted to take a slower approach:
-
-> **Build one mechanic, understand it, test it, then move on to the next one.**
-
-The current version is therefore not just a new version of the simulation. It is also a new approach to how I develop the project.
+I want to eventually be able to sit back and watch my digital civilization completely fuck itself up. 🗿
 
 ---
 
-# 📈 Development Progress
+## Why I restarted the project
+
+My first version of WorldSimulation became too complicated too quickly.
+
+I was learning Python while building the simulation, and I kept adding systems without really understanding how everything was connected. The result was messy, difficult to maintain, and increasingly difficult for me to understand.
+
+So I decided to restart from scratch.
+
+This time, I want to build the simulation progressively and understand every part of it before moving on.
+
+The philosophy is:
+
+**Understand → Build → Test → Improve → Repeat.**
+
+---
+
+# Development Progress
 
 ## V0.1 — The Beginning
 
-The first goal was extremely simple: create citizens.
+The first version introduced the basic concept of citizens.
 
-I created a `Citizen` class containing basic information about each citizen.
+Each citizen had:
 
-### Added
+* An age
+* Money
+* A randomly generated starting state
 
-* `Citizen` class
-* Random citizen ages
-* Random starting money
-* A list containing all citizens
-* Generation of an initial population
+I created a `Citizen` class and stored all citizens inside a list.
 
-At this stage, citizens were basically just data.
+This was where I started getting more comfortable with:
 
-There was no concept of time or interaction between the different systems yet.
+* Classes
+* Objects
+* Lists
+* Loops
+* Random values
+* Object attributes
 
 ---
 
-## V0.2 — Introducing Time
+## V0.2 — Time
 
-The next step was making the world actually move forward.
+I added the concept of time.
 
-I introduced a basic time system using **months and years**.
+The simulation now has:
 
-### Added
+* Months
+* Years
+* Citizens aging over time
 
-* `month` variable
-* `year` variable
-* `advance_time()` function
-* Automatic aging every 12 months
-* `age_up()` method for individual citizens
+Instead of putting world time inside the `Citizen` class, I created a separate `advance_time()` function responsible for moving the world forward.
 
-The important design decision here was separating **world mechanics** from **citizen mechanics**.
-
-The world controls the passage of time, while each citizen is responsible for changing their own age.
+This helped me understand the difference between something that belongs to an individual citizen and something that affects the entire simulation.
 
 ---
 
 ## V0.3 — Salaries
 
-After having time progression, I needed something that could happen during that time.
+Citizens can now have a salary.
 
-I added employment-related income.
+Their salary is generated when they are created and remains part of their individual state.
 
-Citizens can now have an individual salary, which is generated when they are created.
+Each month, employed citizens receive their salary.
 
-### Added
-
-* Individual salaries
-* Random salary generation
-* Monthly salary payments
-* Salary stored as a citizen attribute
-
-This introduced the first real economic system into the simulation.
+This introduced the first real economic mechanic of the simulation.
 
 ---
 
 ## V0.4 — Spending
 
-Having citizens earn money without ever spending it obviously wouldn't make for a very interesting economy.
+Citizens now spend money every month.
 
-So I added monthly spending.
+Their spending is based on their current amount of money, with a random percentage between 10% and 50%.
 
-Each month, a citizen spends a random percentage of their current money.
+This means that citizens don't simply accumulate money forever.
 
-### Added
-
-* Monthly spending
-* Random spending between 10% and 50% of current money
-* Spending based on current wealth rather than salary
-
-Using current money instead of salary was intentional because future citizens may not have a salary at all.
+The economy can now actually change over time.
 
 ---
 
 ## V0.5 — Employment, Unemployment & Retirement
 
-The next step was making employment less binary.
+Citizens can now be:
 
-Not every citizen should have a job.
+* Employed
+* Unemployed
+* Retired
 
-I introduced employment probabilities and retirement.
+When a citizen is created, there is a 70% chance of being employed and a 30% chance of being unemployed.
 
-### Added
+Citizens retire at 60 and stop receiving a salary.
 
-* Employed citizens
-* Unemployed citizens
-* 70% employment probability for working-age citizens
-* 30% unemployment probability
-* Retirement at age 60
-* Retired citizens have no salary
-
-This was also the first step toward making citizens behave differently depending on their age.
+This was another step toward making citizens behave differently from one another instead of being simple containers of random numbers.
 
 ---
 
-## V0.6 — Automatic Simulation
+## V0.6 — Automatic Time... Then I Changed My Mind
 
-Until this point, time had to be advanced manually.
+At first, I wanted the simulation to run automatically.
 
-I wanted to actually **watch the simulation run**.
+Until this point, time had to be advanced manually, so I added an automatic time loop with different simulation speeds.
 
-I added an automatic time loop with different simulation speeds.
+The idea was to be able to simply sit back and watch the world evolve.
 
-### Added
+I added:
 
 * Automatic monthly time progression
-* Normal speed
-* Fast speed
-* Slow speed
-* Pause functionality
-* Resume functionality
+* Normal / fast / slow speeds
+* Pause / resume
 * Keyboard controls
-* Startup instructions
-* 10-second startup countdown
+* A startup countdown
 
-### Controls
+However, after actually using it, I realized that **automatic time was a bad idea for the current stage of the project**.
 
-| Key | Action       |
-| --- | ------------ |
-| `1` | Normal speed |
-| `2` | Fast speed   |
-| `3` | Slow speed   |
-| `0` | Pause        |
+While developing the simulation, I need to be able to control exactly when time passes. Automatically advancing the world made testing mechanics more annoying and made it harder to observe what was happening.
 
-For now, the simulation uses **10 citizens** instead of 100.
+So I removed the automatic system.
 
-This makes it easier to observe individual citizens and verify that the systems are actually working before increasing the population again.
+Time is now advanced manually:
+
+* `1` → +1 month
+* `2` → +3 months
+* `Shift` → +1 year
+* `Tab` → +3 years
+
+This ended up being a useful lesson: **a feature can sound good in theory but still be bad for the actual workflow of the project.**
 
 ---
 
-# 🧠 What I am learning
+# What I Am Learning
 
-WorldSimulation is also an experiment in learning how to build software properly.
+WorldSimulation is also my way of learning Python by building something bigger than the individual concepts I am studying.
 
-Instead of trying to create the entire simulation at once, I am gradually learning how different systems interact:
+Through this project, I am learning:
 
 * Object-oriented programming
 * Classes and objects
-* Inheritance, composition and polymorphism
-* Randomized systems
-* Time-based simulation
+* Inheritance
+* Composition
+* Polymorphism
+* Lists and dictionaries
+* Functions
+* Loops
+* Randomization
 * State management
-* Loops and conditional logic
-* Basic simulation design
-* Debugging and testing
-* Git and GitHub
+* File handling
+* Debugging
+* Git & GitHub
 * Project organization
+* Simulation logic
 
-The project is intentionally being built step by step.
+I am deliberately trying not to vibe-code the project.
 
----
-
-# 🤖 AI-Assisted Learning
-
-I am building this project as a way to learn and improve my Python and software development skills.
-
-I use AI as a **learning assistant and technical advisor**: to explain concepts, discuss design decisions, help debug problems, and challenge my reasoning.
-
-The project is developed progressively, with the goal of understanding and writing the code myself rather than blindly generating it.
-
-AI is there to help me understand the problem, not to build the entire project for me.
+I want to understand the code I write and know why every part exists.
 
 ---
 
-# 🛠️ Technologies
+# Future Ideas
 
-* Python
-* Git
-* GitHub
+The simulation will eventually include more systems such as:
 
----
-
-# 🔮 Future Ideas
-
-There are many systems I would like to experiment with in the future.
-
-Some possible ideas include:
-
-* Population growth
-* Reproduction
-* Relationships
-* Families
-* Jobs and different professions
-* More complex economies
-* Happiness and mood
-* Random events
-* Diseases
-* Crime
-* Education
 * Death
-* Different social classes
-* Government and laws
-* Natural disasters
-* Wars and conflicts
-* Political systems
-* Major world events
+* Birth and reproduction
+* Happiness / mood
+* Statistics
+* Population changes
+* More complex economic behavior
+* Different types of citizens
+* Relationships and families
+* Professions
+* Other systems that emerge naturally as the project develops
 
-Some of these ideas may change completely as the project develops.
+I don't want to add mechanics just because they sound cool.
 
-For now, the priority is to build a solid foundation before adding more complexity.
+The goal is to build a foundation first and only introduce new systems when they actually contribute to the simulation.
 
 ---
 
-# 📌 Current Philosophy
+# Current Philosophy
 
-WorldSimulation is not meant to be built as quickly as possible.
+WorldSimulation is not supposed to be a perfect simulation of reality.
 
-One of the biggest lessons from the first attempt was that **adding features faster does not necessarily mean making better progress**.
+It is a sandbox.
 
-The current approach is simple:
+I create rules, let them interact, and observe the results.
+
+Eventually, I want the world to become complex enough that I can introduce a new rule and have no idea exactly what will happen.
+
+That's where the fun begins.
 
 **Understand → Build → Test → Improve → Repeat.**
 
-The simulation may start small, but the goal is to gradually turn it into a living system where unexpected things can happen simply because different rules interact with each other.
-
-I want to be able to define or change rules and then observe what happens instead of manually scripting every outcome.
-
-And yes, eventually I want to be able to sit back and watch my little digital civilization completely fuck itself up. 🗿
-
 ---
 
-## 📊 Status
+## Status
 
-🚧 **Active development — V0.6 SOON V1**
-
-The simulation is still in its early stages, but the foundation is being built progressively and deliberately.
+🚧 **Active development — V0.6 → V1**
