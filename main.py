@@ -39,13 +39,27 @@ def advance_time():
         spend = citizen.money * random.uniform(0.1, 0.5)  # Random spending between 10% and 50%
     
     
+print("""
+===== WORLD SIMULATION =====
 
+1 → Normal speed
+2 → Fast speed
+3 → Slow speed
+0 → Pause
 
-print("Initial citizens:")
-print(f"Year: {year}, Month: {month}") 
-for i in range(100):
-    citizen = Citizen(random.randint(20, 39), random.randint(1000, 10000))
-    citizens.append(citizen)
+""")
+
+for seconds in range(10, 0, -1):
+    print(f"\rThe simulation will start in {seconds} seconds...", end="")
+    time.sleep(1)
+    print("\rThe simulation is starting...          ")       
+
+while True:
+    print("Initial citizens:")
+    print(f"Year: {year}, Month: {month}") 
+    for i in range(10):
+        citizen = Citizen(random.randint(20, 39), random.randint(1000, 10000))
+        citizens.append(citizen)
     if citizen.salary > 0:
         statut = "Employed"
     else:
@@ -59,21 +73,6 @@ for i in range(100):
     else:
         print(f"Citizen {i+1}: Age: {citizen.age}, Money: {citizen.money}, Status: {statut}")
         
-print("""
-===== WORLD SIMULATION =====
-
-1 → Normal speed
-2 → Fast speed
-3 → Slow speed
-0 → Pause
-
-""")
-
-for seconds in range(10, 0, -1):
-    print(f"\rThe simulation will start in {seconds} seconds...", end="")
-    time.sleep(1)       
-
-while True:
     if keyboard.is_pressed('1'):
        speed = 0.5  # Normal speed
        paused = False  # Resume the simulation
@@ -87,7 +86,6 @@ while True:
         paused = False  # Resume the simulation
         
     elif keyboard.is_pressed('0'):
-        speed = 0.0  # Pause the simulation
         paused = True  # Pause the simulation
     
     if not paused:
