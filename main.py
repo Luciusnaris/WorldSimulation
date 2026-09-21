@@ -71,16 +71,61 @@ def advance_time():
         for citizen in citizens:
             if citizen.state == "Alive":    
                 citizen.age_up()  # every citizen ages up every year
-    if citizen.state == "Alive":
-        for citizen in citizens:
+    for citizen in citizens:
+        if citizen.state == "Alive":
             citizen.money += citizen.salary
             spend = citizen.money * random.uniform(0.1, 0.5)  # Random spending between 10% and 50%
             citizen.money -= spend# this is the amount of money spent by the citizen each month, which is a random percentage of their current money
             death_probability(citizen.age)
     death()  # If the citizen is dead, we don't need to do anything
 
+def population_stats():
+    alive_count = 0
+    dead_count = 0
+    for citizen in citizens:
+        if citizen.state == "Alive":
+            alive_count += 1
+        else:
+            dead_count += 1
+            
+    total_age = 0
+    for citizen in citizens:
+        if citizen.state == "Alive":
+            total_age += citizen.age
+    try:
+        average_age = total_age / alive_count
+    except ZeroDivisionError:
+        average_age = 0
+        print("Every citizen is dead.")
+    
+    total_salary = 0
+    for citizen in citizens:
+        if citizen.state == "Alive":
+            total_salary += citizen.salary
+    try:
+        average_salary = total_salary / alive_count
+    except ZeroDivisionError:
+        average_salary = 0
+        print("Every citizen is dead.")
+
+    senior_count = 0
+    major_count = 0
+    minor_count = 0
+
+    for citizen in citizens:
+        if citizen.state == "Alive":
+            if citizen.age >= 60:
+                senior_count += 1
+            elif citizen.age >= 18:
+                major_count += 1
+            else:
+                minor_count += 1
+    print(f"\nPopulation Statistics:\nAlive: {alive_count}\nDead: {dead_count}\nAverage Age: {average_age:.2f}\nAverage Salary: ${average_salary:,.2f}\nSeniors (60+): {senior_count}\nAdults (18-59): {major_count}\nMinors (<18): {minor_count}")
+    return alive_count, dead_count, average_age, average_salary, senior_count, major_count, minor_count
+     
+
 print("Initial citizens:")
-for i in range(10):
+for i in range(1000):
     citizen = Citizen(random.randint(20, 39), random.randint(1000, 10000))
     citizens.append(citizen)
     if citizen.salary > 0:
@@ -107,71 +152,41 @@ def display_citizens():
         else:
             print(f"Citizen {i+1} ¦ {citizen.age} ¦ {citizen.state} ¦ Happiness: {citizen.happiness} ¦ ${citizen.money:,.0f} ¦ {statut} ¦ Salary: {citizen.salary:,.0f}")
 
-def population_stats():
-    alive_count = 0
-    dead_count = 0
-    for citizen in citizens:
-        if citizen.state == "Alive":
-            alive_count += 1
-        else:
-            dead_count += 1
-            
-    total_age = 0
-    for citizen in citizens:
-        if citizen.state == "Alive":
-            total_age += citizen.age
-    average_age = total_age / alive_count
-    
-    total_salary = 0
-    for citizen in citizens:
-        if citizen.state == "Alive":
-            total_salary += citizen.salary
-    average_salary = total_salary / alive_count
-    
-    senior_count = 0
-    major_count = 0
-    minor_count = 0
-
-    for citizen in citizens:
-        if citizen.state == "Alive":
-            if citizen.age >= 60:
-                senior_count += 1
-            elif citizen.age >= 18:
-                major_count += 1
-            else:
-                minor_count += 1
-    print(f"\nPopulation Statistics:\nAlive: {alive_count}\nDead: {dead_count}\nAverage Age: {average_age:.2f}\nAverage Salary: ${average_salary:,.2f}\nSeniors (60+): {senior_count}\nAdults (18-59): {major_count}\nMinors (<18): {minor_count}")
-    return alive_count, dead_count, average_age, average_salary, senior_count, major_count, minor_count
-     
-display_citizens()
+def display_date():
+    print(f"\nYear: {year} ¦ Month: {month}\n")
+display_date()
 while True:
     if keyboard.is_pressed('1'):
         advance_time()
-        display_citizens()
+        display_date()
+        population_stats()
         while keyboard.is_pressed('1'):
             pass  # Wait until the key is released
 
     elif keyboard.is_pressed('2'):
         for _ in range(3):
             advance_time()
-        display_citizens()
+        display_date()
+        population_stats()
         while keyboard.is_pressed('2'):
             pass  # Wait until the key is released
     elif keyboard.is_pressed('shift'):
         for _ in range(12):
             advance_time()
-        display_citizens()
+        display_date()
+        population_stats()
         while keyboard.is_pressed('shift'):
             pass  # Wait until the key is released
     elif keyboard.is_pressed('tab'):
         for _ in range(36):
             advance_time()
-        display_citizens()
+        display_date()
+        population_stats()
         while keyboard.is_pressed('tab'):
             pass  # Wait until the key is released
-    elif keyboard.is_pressed('space'):
-        population_stats()
-        while keyboard.is_pressed('space'):
+    elif keyboard.is_pressed('j'):
+        display_citizens()
+        while keyboard.is_pressed('j'):
             pass  # Wait until the key is released
     elif keyboard.is_pressed('end'):
         break
