@@ -1,145 +1,12 @@
-import random
+import simulation
 import keyboard
 
 
-citizens = []
-
-month = 0
-year = 0
-
-class Citizen:
-    def __init__(self, age, money):
-        self.age = age
-        self.money = money
-        self.state = "Alive"
-        probability = random.randint(1, 10)
-        if probability <= 7:
-            self.salary = random.randint(300, 600) * 100
-        else:
-            self.salary = 0
-        self.happiness = 00 # Initial happiness value
-        if self.salary >= 10000:
-            self.happiness = 110
-        elif self.salary >= 3000:
-            self.happiness += 50
-        elif self.salary >= 0:
-            self.happiness += 30
-
-    def age_up(self):
-        self.age += 1
-
-#FONCTION HORS CLASSE
-
-def death_probability(age):
-    if age < 5:
-        return 0.000418
-    elif age < 15:
-        return 0.0000834
-    elif age < 30:
-        return 0.0000834
-    elif age < 50:
-        return 0.000125
-    elif age < 65:
-        return 0.000418
-    elif age < 75:
-        return 0.00126
-    elif age < 85:
-        return 0.00340
-    elif age < 95:
-        return 0.00874
-    else:
-        return 0.0184
-    
-def death():
-    for citizen in citizens:
-        if citizen.state == "Alive":
-            death_chance = death_probability(citizen.age)
-
-            if random.random() < death_chance:
-                citizen.state = "Dead"
-                citizen.money = 0
-                citizen.salary = 0
-                citizen.happiness = 0 
-
-def advance_time():
-    global month
-    global year
-    month += 1
-    if month % 12 == 0:
-        year += 1
-        month = 0
-        for citizen in citizens:
-            if citizen.state == "Alive":    
-                citizen.age_up()  # every citizen ages up every year
-    for citizen in citizens:
-        if citizen.state == "Alive":
-            citizen.money += citizen.salary
-            spend = citizen.money * random.uniform(0.1, 0.5)  # Random spending between 10% and 50%
-            citizen.money -= spend# this is the amount of money spent by the citizen each month, which is a random percentage of their current money
-            death_probability(citizen.age)
-    death()  # If the citizen is dead, we don't need to do anything
-
-def population_stats():
-    alive_count = 0
-    dead_count = 0
-    for citizen in citizens:
-        if citizen.state == "Alive":
-            alive_count += 1
-        else:
-            dead_count += 1
-            
-    total_age = 0
-    for citizen in citizens:
-        if citizen.state == "Alive":
-            total_age += citizen.age
-    try:
-        average_age = total_age / alive_count
-    except ZeroDivisionError:
-        average_age = 0
-        print("Every citizen is dead.")
-    
-    total_salary = 0
-    for citizen in citizens:
-        if citizen.state == "Alive":
-            total_salary += citizen.salary
-    try:
-        average_salary = total_salary / alive_count
-    except ZeroDivisionError:
-        average_salary = 0
-        print("Every citizen is dead.")
-
-    senior_count = 0
-    major_count = 0
-    minor_count = 0
-
-    for citizen in citizens:
-        if citizen.state == "Alive":
-            if citizen.age >= 60:
-                senior_count += 1
-            elif citizen.age >= 18:
-                major_count += 1
-            else:
-                minor_count += 1
-    print(f"\nPopulation Statistics:\nAlive: {alive_count}\nDead: {dead_count}\nAverage Age: {average_age:.2f}\nAverage Salary: ${average_salary:,.2f}\nSeniors (60+): {senior_count}\nAdults (18-59): {major_count}\nMinors (<18): {minor_count}")
-    return alive_count, dead_count, average_age, average_salary, senior_count, major_count, minor_count
-     
-
-print("Initial citizens:")
-for i in range(1000):
-    citizen = Citizen(random.randint(20, 39), random.randint(1000, 10000))
-    citizens.append(citizen)
-    if citizen.salary > 0:
-        statut = "Employed"
-    else:
-        statut = "Unemployed"     
-    if citizen.age >= 60:
-        statut = "Retired"
-        citizen.salary = 0
-        
-def display_citizens(): 
-    print(f"\nYear: {year}, Month: {month}\n")
-    for i in range(len(citizens)):
-        citizen = citizens[i]
+       
+def display_citizens():
+    print(f"Year: {simulation.year}, Month: {simulation.month}")
+    for i in range(len(simulation.citizens)):
+        citizen = simulation.citizens[i]
         if citizen.salary > 0:
             statut = "Employed"
         else:
@@ -153,40 +20,47 @@ def display_citizens():
             print(f"Citizen {i+1} ¦ {citizen.age} ¦ {citizen.state} ¦ Happiness: {citizen.happiness} ¦ ${citizen.money:,.0f} ¦ {statut} ¦ Salary: {citizen.salary:,.0f}")
 
 def display_date():
-    print(f"\nYear: {year} ¦ Month: {month}\n")
-display_date()
+    print(f"\nYear: {simulation.year} ¦ Month: {simulation.month}\n")
+
+print("Initial citizens:")
+display_citizens()
 while True:
     if keyboard.is_pressed('1'):
-        advance_time()
+        simulation.advance_time()
         display_date()
-        population_stats()
+        simulation.population_info()
         while keyboard.is_pressed('1'):
             pass  # Wait until the key is released
 
     elif keyboard.is_pressed('2'):
         for _ in range(3):
-            advance_time()
+            simulation.advance_time()
         display_date()
-        population_stats()
+        simulation.population_info()
         while keyboard.is_pressed('2'):
             pass  # Wait until the key is released
     elif keyboard.is_pressed('shift'):
         for _ in range(12):
-            advance_time()
+            simulation.advance_time()
         display_date()
-        population_stats()
+        simulation.population_info()
         while keyboard.is_pressed('shift'):
             pass  # Wait until the key is released
     elif keyboard.is_pressed('tab'):
         for _ in range(36):
-            advance_time()
+            simulation.advance_time()
         display_date()
-        population_stats()
+        simulation.population_info()
         while keyboard.is_pressed('tab'):
             pass  # Wait until the key is released
     elif keyboard.is_pressed('j'):
         display_citizens()
         while keyboard.is_pressed('j'):
             pass  # Wait until the key is released
+    elif keyboard.is_pressed('d'):
+        stats = simulation.population_stats_details()
+        print(f"\nPopulation Statistics:\nAlive: {stats[0]}\nDead: {stats[1]}\nAverage Age: {stats[2]:.2f}\nEmployment Rate: {stats[3]}\nUnemployment Rate: {stats[4]}\nRetirment Rate: {stats[5]}\nAverage Salary: ${stats[6]:,.2f}\nSeniors (60+): {stats[7]}\nAdults (18-59): {stats[8]}\nMinors (<18): {stats[9]}")
+        while keyboard.is_pressed('d'):
+            pass#WAIT UNTIL RELEASED
     elif keyboard.is_pressed('end'):
         break
