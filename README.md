@@ -157,4 +157,110 @@ The death system is based on probabilities defined separately from the simulatio
 
 This introduced an important concept for the project:
 
-**Rules determine what can happen. The simulation applies those rules to**
+**Rules determine what can happen. The simulation applies those rules to the world.**
+
+---
+
+## V0.8 — Population Statistics
+
+The simulation can now calculate information about the population.
+
+It currently tracks things such as:
+
+* Living population
+* Dead population
+* Average age
+* Employment rate
+* Unemployment rate
+* Retirement rate
+* Average salary
+* Number of seniors
+* Number of adults
+* Number of minors
+
+Detailed statistics can be displayed manually when needed.
+
+This makes it possible to observe the consequences of the simulation instead of only looking at individual citizens.
+
+---
+
+## V0.9 — Job Loss
+
+Employment is no longer permanent.
+
+Employed citizens now have a probability of losing their job depending on their age.
+
+The simulation can therefore produce citizens who:
+
+**work → lose their job → become unemployed → find another job**
+
+This makes employment an actual changing state instead of something determined only when a citizen is created.
+
+---
+
+# What I Am Learning
+
+WorldSimulation is also my way of learning Python by building something bigger than the individual concepts I am studying.
+
+Through this project, I am learning:
+
+* Object-oriented programming
+* Classes and objects
+* Inheritance
+* Composition
+* Polymorphism
+* Lists and dictionaries
+* Functions
+* Loops
+* Randomization
+* State management
+* Debugging
+* Git & GitHub
+* Project organization
+* Simulation logic
+
+I am deliberately trying not to vibe-code the project.
+
+I want to understand the code I write and know why every part exists.
+
+---
+
+# Future Ideas
+
+The simulation will eventually include more systems such as:
+
+* Birth and reproduction
+* Happiness / mood
+* Population growth and decline
+* More complex economic behavior
+* Different types of citizens
+* Relationships and families
+* Professions
+* More detailed life events
+* Other systems that emerge naturally as the project develops
+
+I don't want to add mechanics just because they sound cool.
+
+The goal is to build a foundation first and only introduce new systems when they actually contribute to the simulation.
+
+---
+
+# Current Philosophy
+
+WorldSimulation is not supposed to be a perfect simulation of reality.
+
+It is a sandbox.
+
+I create rules, let them interact, and observe the results.
+
+Eventually, I want the world to become complex enough that I can introduce a new rule and have no idea exactly what will happen.
+
+That's where the fun begins.
+
+**Understand → Build → Test → Improve → Repeat.**
+
+---
+
+## Status
+
+🚧 **Active development — V0.9 → V1**
