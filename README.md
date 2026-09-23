@@ -138,71 +138,23 @@ This ended up being a useful lesson: **a feature can sound good in theory but st
 
 ---
 
-# What I Am Learning
+## V0.7 — Death
 
-WorldSimulation is also my way of learning Python by building something bigger than the individual concepts I am studying.
+The world is no longer populated by immortal citizens. 💀
 
-Through this project, I am learning:
+Citizens now have a probability of dying based on their age.
 
-* Object-oriented programming
-* Classes and objects
-* Inheritance
-* Composition
-* Polymorphism
-* Lists and dictionaries
-* Functions
-* Loops
-* Randomization
-* State management
-* File handling
-* Debugging
-* Git & GitHub
-* Project organization
-* Simulation logic
+Older citizens have a significantly higher chance of dying than younger citizens.
 
-I am deliberately trying not to vibe-code the project.
+When a citizen dies:
 
-I want to understand the code I write and know why every part exists.
+* Their state becomes `Dead`
+* Their salary becomes `0`
+* Their money becomes `0`
+* Their happiness becomes `0`
 
----
+The death system is based on probabilities defined separately from the simulation itself.
 
-# Future Ideas
+This introduced an important concept for the project:
 
-The simulation will eventually include more systems such as:
-
-* Death
-* Birth and reproduction
-* Happiness / mood
-* Statistics
-* Population changes
-* More complex economic behavior
-* Different types of citizens
-* Relationships and families
-* Professions
-* Other systems that emerge naturally as the project develops
-
-I don't want to add mechanics just because they sound cool.
-
-The goal is to build a foundation first and only introduce new systems when they actually contribute to the simulation.
-
----
-
-# Current Philosophy
-
-WorldSimulation is not supposed to be a perfect simulation of reality.
-
-It is a sandbox.
-
-I create rules, let them interact, and observe the results.
-
-Eventually, I want the world to become complex enough that I can introduce a new rule and have no idea exactly what will happen.
-
-That's where the fun begins.
-
-**Understand → Build → Test → Improve → Repeat.**
-
----
-
-## Status
-
-🚧 **Active development — V0.6 → V1**
+**Rules determine what can happen. The simulation applies those rules to**
