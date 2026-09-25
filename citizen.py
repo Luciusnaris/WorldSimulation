@@ -7,6 +7,8 @@ class Citizen:
         self.state = "Alive"
         self.parents = []
         self.children = []
+        self.housing = True
+        self.unpaid_rent=0
         #FOR SEX
         if random.random() < 0.512:
             self.sex = "Male"
@@ -15,7 +17,7 @@ class Citizen:
         #SALARY PROBABILITY   
         probability = random.randint(1, 10)
         if probability <= 7:
-            self.salary = random.randint(300, 600) * 100
+            self.salary = random.randint(30, 60) * 100
         else:
             self.salary = 0
         #HAPPINESS DEPENDANCING ON SALARY

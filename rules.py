@@ -62,3 +62,7 @@ def income_tax(salary):
         return 0.20
     elif salary >= 8000:
         return 0.25
+
+def housing():
+    rent = 1500
+    return rent

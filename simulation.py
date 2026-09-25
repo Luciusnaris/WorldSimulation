@@ -1,11 +1,12 @@
 import random
-from rules import death_probability, birth_probability, job_finding, job_losing
+from rules import death_probability, birth_probability, job_finding, job_losing, income_tax, housing
 from citizen import Citizen
 
 citizens = []
 
 month = 0
 year = 0
+
 
 
 for i in range(10):
@@ -39,7 +40,15 @@ def losing_job():
             losing_chance = job_losing(citizen.age)
             if random.random()<losing_chance:
                 citizen.statut = "Unemployed"
-
+def tax():
+    for citizen in citizens:
+        if citizen.state == "Alive":
+            taxes = income_tax(citizen.salary)
+            tax_amount = citizen.salary * taxes
+            if citizen.money >= tax_amount:
+                citizen.money -= tax_amount
+            else:
+                citizen.money = 0
 def birth():
     #I REALLY DON'T KNOW HOW
     pass
@@ -57,11 +66,22 @@ def advance_time():
     for citizen in citizens:
         if citizen.state == "Alive":
             citizen.money += citizen.salary
-            spend = citizen.money * random.uniform(0.1, 0.5)  # Random spending between 10% and 50%
-            citizen.money -= spend# this is the amount of money spent by the citizen each month, which is a random percentage of their current money
+            food = citizen.money * random.uniform(0.05, 0.1)  # Random spending food between 5% and 10%
+            rent = housing()#there i make a variable "rent" who represent the housing
+            if citizen.money >= rent:
+                total_spend = food + rent
+                citizen.money -= total_spend#this is the amount of money spent by the citizen each month, which is a random percentage of their current money
+                citizen.unpaid_rent = 0#reinitialize
+            elif citizen.money < rent:
+                total_spend = food
+                citizen.money -= total_spend
+                citizen.unpaid_rent += 1
+                if citizen.unpaid_rent == 3:
+                    citizen.housing = False
     death()  # If the citizen is dead, we don't need to do anything
     job()
     losing_job()
+    tax()
 
 def population_stats_details():
     alive_count = 0
@@ -69,6 +89,7 @@ def population_stats_details():
     employed_count = 0
     unemployed_count = 0
     retired_count = 0
+    homeless_count = 0
     #Alive and Dead count
     for citizen in citizens:
         if citizen.state == "Alive":
@@ -93,7 +114,7 @@ def population_stats_details():
     for citizen in citizens:
         if citizen.state == "Alive" and citizen.age < 60:
             total_salary += citizen.salary
-    #AVERAGE SALARY CALCUL
+#AVERAGE SALARY CALCUL
     try:
         average_salary = total_salary / employed_count
     except ZeroDivisionError:
@@ -120,10 +141,17 @@ def population_stats_details():
         retirement_rate = retired_count / alive_count * 100
     except ZeroDivisionError:
         retirement_rate = 0
+    
+    for citizen in citizens:
+        if citizen.state == "Alive" and citizen.housing == False:
+            homeless_count += 1
+        try:
+            homeless_rate = homeless_count/alive_count * 100
+        except ZeroDivisionError:
+            homeless_rate = 0
     senior_count = 0
     major_count = 0
     minor_count = 0
-#AND HERE I DISPLAY STATS
     for citizen in citizens:
         if citizen.state == "Alive":
             if citizen.age >= 60:
@@ -132,7 +160,7 @@ def population_stats_details():
                 major_count += 1
             else:
                 minor_count += 1
-    return alive_count, dead_count, average_age, employment_rate, unemployment_rate, retirement_rate, average_salary, senior_count, major_count, minor_count
+    return alive_count, dead_count, average_age, employment_rate, unemployment_rate, retirement_rate, average_salary, senior_count, major_count, minor_count, homeless_rate
      
 def population_info():
     stats = population_stats_details()
@@ -144,5 +172,6 @@ Average Age: {stats[2]:.2f}
 Employment: {stats[3]:.2f}%
 Unemployment: {stats[4]:.2f}%
 Retirement: {stats[5]:.2f}%
+Homeless: {stats[10]:.2f}%
 Press [D] for details
 """)

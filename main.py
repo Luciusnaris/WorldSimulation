@@ -59,7 +59,7 @@ while True:
             pass  # Wait until the key is released
     elif keyboard.is_pressed('d'):
         stats = simulation.population_stats_details()
-        print(f"\nPopulation Statistics:\nAlive: {stats[0]}\nDead: {stats[1]}\nAverage Age: {stats[2]:.2f}\nEmployment Rate: {stats[3]}\nUnemployment Rate: {stats[4]}\nRetirment Rate: {stats[5]}\nAverage Salary: ${stats[6]:,.2f}\nSeniors (60+): {stats[7]}\nAdults (18-59): {stats[8]}\nMinors (<18): {stats[9]}")
+        print(f"\nPopulation Statistics:\nAlive: {stats[0]}\nDead: {stats[1]}\nAverage Age: {stats[2]:.2f}\nEmployment Rate: {stats[3]}\nUnemployment Rate: {stats[4]}\nRetirment Rate: {stats[5]}\nHomeless Rate: {stats[10]}\nAverage Salary: ${stats[6]:,.2f}\nSeniors (60+): {stats[7]}\nAdults (18-59): {stats[8]}\nMinors (<18): {stats[9]}")
         while keyboard.is_pressed('d'):
             pass
     elif keyboard.is_pressed('end'):
