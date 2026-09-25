@@ -7,6 +7,8 @@ class Citizen:
         self.state = "Alive"
         self.parents = []
         self.children = []
+        self.partner = None
+        self.pregnancy = 0
         self.housing = True
         self.unpaid_rent=0
         #FOR SEX
@@ -20,22 +22,17 @@ class Citizen:
             self.salary = random.randint(30, 60) * 100
         else:
             self.salary = 0
-        #HAPPINESS DEPENDANCING ON SALARY
-        self.happiness = 00 # Initial happiness value
-        if self.salary >= 10000:
-            self.happiness = 110
-        elif self.salary >= 3000:
-            self.happiness += 50
-        elif self.salary >= 0:
-            self.happiness += 30
-        #JOB STATUT    
+        
         if self.salary > 0:
             self.statut = "Employed"
         else:
-            self.statut = "Unemployed"     
+            self.statut = "Unemployed"
+
         if self.age >= 60:
             self.statut = "Retired"
-
+        #HAPPINESS DEPENDANCING ON SALARY
+        self.happiness = 00 # Initial happiness value
+    
     def age_up(self):
         self.age += 1
         if self.age > 59:

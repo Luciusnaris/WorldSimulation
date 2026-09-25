@@ -26,6 +26,10 @@ def death():
                 citizen.money = 0
                 citizen.salary = 0
                 citizen.happiness = 0 
+                
+                if citizen.partner is not None:
+                    citizen.partner.partner = None
+                    citizen.partner = None                    
 
 def job():
     for citizen in citizens:
@@ -50,8 +54,82 @@ def tax():
             else:
                 citizen.money = 0
 def birth():
-    #I REALLY DON'T KNOW HOW
-    pass
+    for citizen in citizens[:]:
+        if citizen.state == "Alive" and citizen.pregnancy > 0:
+            citizen.pregnancy += 1
+
+            if citizen.pregnancy >= 9:
+                baby = Citizen(0, 0)
+
+                citizen.children.append(baby)
+                baby.parents.append(citizen)
+
+                citizens.append(baby)
+                citizen.pregnancy = 0
+
+    for citizen in citizens:
+        if citizen.state == "Alive" and citizen.sex == "Female":
+            if citizen.age >= 12 and citizen.partner is not None:
+                if citizen.pregnancy == 0:
+                    chance = birth_probability(citizen.age)
+
+                    if citizen.money < 1500:
+                        chance *= 0.5
+                    elif citizen.money >= 5000:
+                        chance *= 1.25
+
+                    if random.random() < chance:
+                        citizen.pregnancy = 1
+                        
+def find_partners():
+    single_males = []
+    single_females = []
+
+    for citizen in citizens:
+        if citizen.state == "Alive" and citizen.partner is None and citizen.age >= 18:
+            if citizen.sex == "Male":
+                single_males.append(citizen)
+            else:
+                single_females.append(citizen)
+
+    random.shuffle(single_males)
+    random.shuffle(single_females)
+
+    for male, female in zip(single_males, single_females):
+        male.partner = female
+        female.partner = male
+        
+def happiness():
+    for citizen in citizens:
+        if citizen.state != "Alive":
+            continue
+
+        score = 0
+
+        # ARGENT : jusqu'à 35%
+        if citizen.money >= 10000:
+            score += 35
+        else:
+            score += (citizen.money / 10000) * 35
+
+        # SALAIRE : jusqu'à 30%
+        if citizen.salary >= 10000:
+            score += 30
+        else:
+            score += (citizen.salary / 10000) * 30
+
+        # LOGEMENT : jusqu'à 20%
+        if citizen.housing:
+            score += 20
+
+        # PARTENAIRE : +8%
+        if citizen.partner is not None:
+            score += 8
+
+        # ENFANTS : +5% maximum
+        score += min(len(citizen.children) * 1, 5)
+
+        citizen.happiness = min(score, 98)
 
 def advance_time():
     global month
@@ -82,6 +160,9 @@ def advance_time():
     job()
     losing_job()
     tax()
+    find_partners()
+    birth()
+    happiness()
 
 def population_stats_details():
     alive_count = 0

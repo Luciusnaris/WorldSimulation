@@ -13,11 +13,14 @@ def display_citizens():
             statut = "Unemployed"     
         if citizen.age >= 60:
             statut = "Retired"
-            citizen.salary = 0  
-        if statut == "Employed":
-            print(f"Citizen {i+1} ¦ {citizen.age} ¦ {citizen.state} ¦ Happiness: {citizen.happiness} ¦ ${citizen.money:,.0f} ¦ {statut} ¦ Salary: {citizen.salary:,.0f}")
+        if citizen.partner:
+            partner = citizen.partner.sex
         else:
-            print(f"Citizen {i+1} ¦ {citizen.age} ¦ {citizen.state} ¦ Happiness: {citizen.happiness} ¦ ${citizen.money:,.0f} ¦ {statut} ¦ Salary: {citizen.salary:,.0f}")
+            partner = "None" 
+        if statut == "Employed":
+            print(f"Citizen {i+1} ¦ {citizen.age} ¦ {citizen.state} ¦ Happiness: {citizen.happiness} ¦ ${citizen.money:,.0f} ¦ {statut} ¦ Salary: {citizen.salary:,.0f} ¦ Partner: {partner}")
+        else:
+            print(f"Citizen {i+1} ¦ {citizen.age} ¦ {citizen.state} ¦ Happiness: {citizen.happiness} ¦ ${citizen.money:,.0f} ¦ {statut} ¦ Salary: {citizen.salary:,.0f} ¦ Partner: {partner}")
 
 def display_date():
     print(f"\nYear: {simulation.year} ¦ Month: {simulation.month}\n")

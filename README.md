@@ -8,7 +8,7 @@ I want to eventually be able to sit back and watch my digital civilization compl
 
 ---
 
-## Why I restarted the project
+## Why I Restarted the Project
 
 My first version of WorldSimulation became too complicated too quickly.
 
@@ -20,247 +20,312 @@ This time, I want to build the simulation progressively and understand every par
 
 The philosophy is:
 
-**Understand → Build → Test → Improve → Repeat.**
+> **Understand → Build → Test → Improve → Repeat.**
 
 ---
 
-# Development Progress
+# V1
 
-## V0.1 — The Beginning
+V1 is the first complete foundation of WorldSimulation.
 
-The first version introduced the basic concept of citizens.
+The simulation contains a population of citizens living inside a small virtual world. Each citizen has their own characteristics and can interact with different systems that affect their life.
 
-Each citizen had:
-
-* An age
-* Money
-* A randomly generated starting state
-
-I created a `Citizen` class and stored all citizens inside a list.
-
-This was where I started getting more comfortable with:
-
-* Classes
-* Objects
-* Lists
-* Loops
-* Random values
-* Object attributes
+The world progresses month by month, with different systems being processed as time advances.
 
 ---
 
-## V0.2 — Time
+## Features
 
-I added the concept of time.
+### 👤 Citizens
 
-The simulation now has:
+Each citizen has their own:
 
-* Months
-* Years
-* Citizens aging over time
+- Age
+- Sex
+- Money
+- Salary
+- Employment status
+- Housing status
+- Happiness
+- Partner
+- Parents
+- Children
+- Pregnancy
 
-Instead of putting world time inside the `Citizen` class, I created a separate `advance_time()` function responsible for moving the world forward.
-
-This helped me understand the difference between something that belongs to an individual citizen and something that affects the entire simulation.
-
----
-
-## V0.3 — Salaries
-
-Citizens can now have a salary.
-
-Their salary is generated when they are created and remains part of their individual state.
-
-Each month, employed citizens receive their salary.
-
-This introduced the first real economic mechanic of the simulation.
+Citizens are individual objects created using the `Citizen` class.
 
 ---
 
-## V0.4 — Spending
+### ⏳ Time
 
-Citizens now spend money every month.
+The simulation is based on months and years.
 
-Their spending is based on their current amount of money, with a random percentage between 10% and 50%.
+Citizens age as time passes, and different events are processed every month.
 
-This means that citizens don't simply accumulate money forever.
+Time can currently be advanced manually:
 
-The economy can now actually change over time.
+| Key     | Action    |
+| ------- | --------- |
+| `1`     | +1 month  |
+| `2`     | +3 months |
+| `Shift` | +1 year   |
+| `Tab`   | +3 years  |
 
----
-
-## V0.5 — Employment, Unemployment & Retirement
-
-Citizens can now be:
-
-* Employed
-* Unemployed
-* Retired
-
-When a citizen is created, there is a 70% chance of being employed and a 30% chance of being unemployed.
-
-Citizens retire at 60 and stop receiving a salary.
-
-This was another step toward making citizens behave differently from one another instead of being simple containers of random numbers.
+Manual time progression makes it easier to test and observe the simulation.
 
 ---
 
-## V0.6 — Automatic Time... Then I Changed My Mind
+### 💼 Employment
 
-At first, I wanted the simulation to run automatically.
+Citizens can be:
 
-Until this point, time had to be advanced manually, so I added an automatic time loop with different simulation speeds.
+- Employed
+- Unemployed
+- Retired
 
-The idea was to be able to simply sit back and watch the world evolve.
+Citizens have a probability of finding a job based on their age.
 
-I added:
+Employed citizens can also lose their jobs.
 
-* Automatic monthly time progression
-* Normal / fast / slow speeds
-* Pause / resume
-* Keyboard controls
-* A startup countdown
+This means employment can change over time:
 
-However, after actually using it, I realized that **automatic time was a bad idea for the current stage of the project**.
+**Work → Lose job → Unemployment → Find another job**
 
-While developing the simulation, I need to be able to control exactly when time passes. Automatically advancing the world made testing mechanics more annoying and made it harder to observe what was happening.
-
-So I removed the automatic system.
-
-Time is now advanced manually:
-
-* `1` → +1 month
-* `2` → +3 months
-* `Shift` → +1 year
-* `Tab` → +3 years
-
-This ended up being a useful lesson: **a feature can sound good in theory but still be bad for the actual workflow of the project.**
+Citizens retire at **60**.
 
 ---
 
-## V0.7 — Death
+### 💰 Economy
 
-The world is no longer populated by immortal citizens. 💀
+Citizens have their own money and salary.
 
-Citizens now have a probability of dying based on their age.
+Every month:
 
-Older citizens have a significantly higher chance of dying than younger citizens.
+- Employed citizens receive their salary
+- Citizens spend money on food
+- Citizens have to pay rent
+- Income taxes are applied
+
+Money therefore changes continuously instead of simply accumulating forever.
+
+---
+
+### 🏠 Housing
+
+Citizens have a housing status.
+
+They must be able to pay their rent each month.
+
+If they cannot pay rent for several consecutive months, they can lose their housing and become homeless.
+
+Housing also affects citizen happiness.
+
+---
+
+### 💀 Death
+
+Citizens have an age-based probability of dying.
+
+The probability changes depending on their age, with older citizens generally having a higher probability of death.
 
 When a citizen dies:
 
-* Their state becomes `Dead`
-* Their salary becomes `0`
-* Their money becomes `0`
-* Their happiness becomes `0`
+- Their state becomes `Dead`
+- Their money becomes `0`
+- Their salary becomes `0`
+- Their happiness becomes `0`
 
-The death system is based on probabilities defined separately from the simulation itself.
-
-This introduced an important concept for the project:
-
-**Rules determine what can happen. The simulation applies those rules to the world.**
+Dead citizens remain in the simulation so the population history can still be observed.
 
 ---
 
-## V0.8 — Population Statistics
+### ❤️ Relationships
 
-The simulation can now calculate information about the population.
+Adult citizens can automatically form partnerships.
 
-It currently tracks things such as:
+Partners are linked to each other, meaning each citizen can reference their partner.
 
-* Living population
-* Dead population
-* Average age
-* Employment rate
-* Unemployment rate
-* Retirement rate
-* Average salary
-* Number of seniors
-* Number of adults
-* Number of minors
-
-Detailed statistics can be displayed manually when needed.
-
-This makes it possible to observe the consequences of the simulation instead of only looking at individual citizens.
+If a citizen's partner dies, the relationship is removed.
 
 ---
 
-## V0.9 — Job Loss
+### 👶 Reproduction
 
-Employment is no longer permanent.
+Citizens can have children.
 
-Employed citizens now have a probability of losing their job depending on their age.
+The reproduction system includes:
 
-The simulation can therefore produce citizens who:
+- Age-based birth probabilities
+- Pregnancy
+- A 9-month pregnancy period
+- Parent/child relationships
+- Money influencing birth probability
 
-**work → lose their job → become unemployed → find another job**
-
-This makes employment an actual changing state instead of something determined only when a citizen is created.
+Children are added to the population as new citizens.
 
 ---
 
-# What I Am Learning
+### 😊 Happiness
+
+Each living citizen has a happiness percentage.
+
+Happiness is calculated from several factors:
+
+- Money
+- Salary
+- Housing
+- Partner
+- Children
+
+Different factors contribute different amounts to the final happiness score.
+
+Happiness can reach a maximum of **98%**, meaning a citizen can never reach 100% happiness.
+
+---
+
+### 📊 Population Statistics
+
+The simulation can calculate information about the population, including:
+
+- Living population
+- Dead population
+- Average age
+- Employment rate
+- Unemployment rate
+- Retirement rate
+- Homelessness rate
+- Average salary
+- Number of seniors
+- Number of adults
+- Number of minors
+
+Detailed statistics can be displayed manually.
+
+---
+
+# Project Structure
+
+```text
+WorldSimulation/
+│
+├── citizen.py
+├── rules.py
+├── simulation.py
+└── main.py
+
+
+# 📁 Project Structure
+
+The project is divided into four main files, each with a specific responsibility.
+
+## `citizen.py`
+
+Contains the `Citizen` class and the individual data and behaviour of citizens.
+
+## `rules.py`
+
+Contains the rules and probabilities used by the simulation:
+
+- Death probabilities
+- Job finding probabilities
+- Job loss probabilities
+- Birth probabilities
+- Income tax
+- Housing costs
+
+## `simulation.py`
+
+Contains the world itself and the systems that make it evolve:
+
+- Time progression
+- Death
+- Employment
+- Economy
+- Taxes
+- Housing
+- Relationships
+- Reproduction
+- Happiness
+- Population statistics
+
+## `main.py`
+
+Handles the user interface, keyboard controls and information displayed to the user.
+
+---
+
+# 🧠 What I Am Learning
 
 WorldSimulation is also my way of learning Python by building something bigger than the individual concepts I am studying.
 
 Through this project, I am learning:
 
-* Object-oriented programming
-* Classes and objects
-* Inheritance
-* Composition
-* Polymorphism
-* Lists and dictionaries
-* Functions
-* Loops
-* Randomization
-* State management
-* Debugging
-* Git & GitHub
-* Project organization
-* Simulation logic
+- Object-oriented programming
+- Classes and objects
+- Composition
+- Lists and dictionaries
+- Functions
+- Loops
+- Randomization
+- State management
+- Debugging
+- Git & GitHub
+- Project organization
+- Simulation logic
 
-I am deliberately trying not to vibe-code the project.
+I am deliberately trying not to blindly vibe-code the project.
 
 I want to understand the code I write and know why every part exists.
 
 ---
 
-# Future Ideas
-
-The simulation will eventually include more systems such as:
-
-* Birth and reproduction
-* Happiness / mood
-* Population growth and decline
-* More complex economic behavior
-* Different types of citizens
-* Relationships and families
-* Professions
-* More detailed life events
-* Other systems that emerge naturally as the project develops
-
-I don't want to add mechanics just because they sound cool.
-
-The goal is to build a foundation first and only introduce new systems when they actually contribute to the simulation.
-
----
-
-# Current Philosophy
+# 🧭 Philosophy
 
 WorldSimulation is not supposed to be a perfect simulation of reality.
 
 It is a sandbox.
 
-I create rules, let them interact, and observe the results.
+I create rules, let them interact, and observe what happens.
 
 Eventually, I want the world to become complex enough that I can introduce a new rule and have no idea exactly what will happen.
 
 That's where the fun begins.
 
-**Understand → Build → Test → Improve → Repeat.**
+> **Understand → Build → Test → Improve → Repeat.**
 
 ---
 
-## Status
+# 🔮 Future Ideas
 
-🚧 **Active development — V0.9 → V1**
+V1 is only the foundation.
+
+Future versions may introduce systems such as:
+
+- More complex economic behaviour
+- More professions
+- Different types of citizens
+- More detailed relationships and families
+- Education
+- Health
+- Crime
+- Politics
+- Culture
+- More detailed life events
+- Social classes
+- Migration
+- Cities
+- More complex population dynamics
+- Other systems that emerge naturally as the simulation develops
+
+I don't want to add mechanics just because they sound cool.
+
+The goal is to build systems that interact with each other and gradually create a more complex world.
+
+---
+
+# 🚧 Status
+
+🟢 **V1 — Complete**
+
+🚧 **Active development**
+```
