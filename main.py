@@ -61,6 +61,6 @@ while True:
         stats = simulation.population_stats_details()
         print(f"\nPopulation Statistics:\nAlive: {stats[0]}\nDead: {stats[1]}\nAverage Age: {stats[2]:.2f}\nEmployment Rate: {stats[3]}\nUnemployment Rate: {stats[4]}\nRetirment Rate: {stats[5]}\nAverage Salary: ${stats[6]:,.2f}\nSeniors (60+): {stats[7]}\nAdults (18-59): {stats[8]}\nMinors (<18): {stats[9]}")
         while keyboard.is_pressed('d'):
-            pass#WAIT UNTIL RELEASED
+            pass
     elif keyboard.is_pressed('end'):
         break

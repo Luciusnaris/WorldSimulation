@@ -47,8 +47,18 @@ def job_losing(age):
     elif age > 59:
         return 0
     
-def birth_probability(age):
-    if age < 6:
-        return 0.00
-    elif age < 14:
-        return 0.0010
+def birth_probability(age):#USELESSSSSSSS
+    pass
+def income_tax(salary):
+    if salary < 1000:
+        return 0
+    elif 1000<= salary <= 1999:
+        return 0.05
+    elif 2000<= salary<=2999:
+        return 0.10
+    elif 3000<= salary<=4999:
+        return 0.15
+    elif 5000<= salary<= 7999:
+        return 0.20
+    elif salary >= 8000:
+        return 0.25
